@@ -10,7 +10,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>CTC forced alignment API tutorial &mdash; Torchaudio 2.2.0.dev20231004 documentation</title>
+  <title>CTC forced alignment API tutorial &mdash; Torchaudio 2.2.0.dev20231115 documentation</title>
   
 
   
@@ -224,7 +224,7 @@
           <div class="pytorch-left-menu-search">
             
     <div class="version">
-      <a href="../../versions.html"><span style="font-size:110%">2.2.0.dev20231004 &#x25BC</span></a>
+      <a href="../../versions.html"><span style="font-size:110%">2.2.0.dev20231115 &#x25BC</span></a>
     </div>
     
 
@@ -335,9 +335,9 @@
 </ul>
 <p class="caption" role="heading"><span class="caption-text">C++ Prototype API Reference</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../libtorchaudio.html">libtorchaudio</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../libtorchaudio.stream_reader.html">torchaudio::io::StreamReader</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../libtorchaudio.stream_writer.html">torchaudio::io::StreamWriter</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../libtorio.html">libtorio</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../libtorio.stream_reader.html">torio::io::StreamingMediaDecoder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../libtorio.stream_writer.html">torio::io::StreamingMediaEncoder</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">PyTorch Libraries</span></p>
 <ul>
@@ -481,8 +481,8 @@ illustrate how to align non-English transcripts.</p>
 <span class="nb">print</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">torchaudio</span><span class="o">.</span><span class="n">__version__</span></a><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2.2.0.dev20231003
-2.2.0.dev20231004
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2.2.0.dev20231114
+2.2.0.dev20231115
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="torch.device" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">device</span></a> <span class="o">=</span> <a href="https://pytorch.org/docs/stable/tensor_attributes.html#torch.device" title="torch.device" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class"><span class="n">torch</span><span class="o">.</span><span class="n">device</span></a><span class="p">(</span><span class="s2">&quot;cuda&quot;</span> <span class="k">if</span> <a href="https://pytorch.org/docs/stable/generated/torch.cuda.is_available.html#torch.cuda.is_available" title="torch.cuda.is_available" class="sphx-glr-backref-module-torch-cuda sphx-glr-backref-type-py-function"><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span></a><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
@@ -529,47 +529,59 @@ the transcript.</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Downloading: &quot;https://dl.fbaipublicfiles.com/mms/torchaudio/ctc_alignment_mling_uroman/model.pt&quot; to /root/.cache/torch/hub/checkpoints/model.pt
 
   0%|          | 0.00/1.18G [00:00&lt;?, ?B/s]
-  2%|1         | 22.6M/1.18G [00:00&lt;00:05, 237MB/s]
-  4%|4         | 48.5M/1.18G [00:00&lt;00:04, 256MB/s]
-  6%|6         | 74.0M/1.18G [00:00&lt;00:04, 261MB/s]
-  8%|8         | 99.5M/1.18G [00:00&lt;00:04, 261MB/s]
- 10%|#         | 124M/1.18G [00:00&lt;00:04, 233MB/s]
- 12%|#2        | 147M/1.18G [00:00&lt;00:04, 233MB/s]
- 14%|#4        | 174M/1.18G [00:00&lt;00:04, 246MB/s]
- 17%|#6        | 202M/1.18G [00:00&lt;00:04, 262MB/s]
- 20%|#9        | 235M/1.18G [00:00&lt;00:03, 288MB/s]
- 22%|##1       | 263M/1.18G [00:01&lt;00:03, 287MB/s]
- 24%|##4       | 294M/1.18G [00:01&lt;00:03, 301MB/s]
- 27%|##7       | 326M/1.18G [00:01&lt;00:02, 311MB/s]
- 30%|##9       | 357M/1.18G [00:01&lt;00:02, 315MB/s]
- 33%|###2      | 393M/1.18G [00:01&lt;00:02, 332MB/s]
- 35%|###5      | 425M/1.18G [00:01&lt;00:02, 319MB/s]
- 38%|###8      | 461M/1.18G [00:01&lt;00:02, 336MB/s]
- 41%|####      | 493M/1.18G [00:01&lt;00:02, 324MB/s]
- 44%|####3     | 524M/1.18G [00:01&lt;00:02, 323MB/s]
- 46%|####6     | 555M/1.18G [00:01&lt;00:02, 308MB/s]
- 49%|####8     | 584M/1.18G [00:02&lt;00:02, 299MB/s]
- 51%|#####     | 613M/1.18G [00:02&lt;00:02, 295MB/s]
- 53%|#####3    | 641M/1.18G [00:02&lt;00:02, 283MB/s]
- 56%|#####5    | 668M/1.18G [00:02&lt;00:02, 279MB/s]
- 58%|#####8    | 698M/1.18G [00:02&lt;00:01, 289MB/s]
- 61%|######    | 730M/1.18G [00:02&lt;00:01, 301MB/s]
- 63%|######3   | 764M/1.18G [00:02&lt;00:01, 318MB/s]
- 66%|######6   | 795M/1.18G [00:02&lt;00:01, 313MB/s]
- 69%|######8   | 826M/1.18G [00:02&lt;00:01, 318MB/s]
- 71%|#######1  | 857M/1.18G [00:03&lt;00:01, 306MB/s]
- 74%|#######3  | 886M/1.18G [00:03&lt;00:01, 292MB/s]
- 76%|#######5  | 914M/1.18G [00:03&lt;00:01, 290MB/s]
- 78%|#######8  | 942M/1.18G [00:03&lt;00:00, 291MB/s]
- 81%|########  | 970M/1.18G [00:03&lt;00:00, 288MB/s]
- 83%|########2 | 997M/1.18G [00:03&lt;00:00, 283MB/s]
- 85%|########5 | 1.00G/1.18G [00:03&lt;00:00, 288MB/s]
- 88%|########7 | 1.03G/1.18G [00:03&lt;00:00, 286MB/s]
- 90%|########9 | 1.06G/1.18G [00:03&lt;00:00, 282MB/s]
- 92%|#########2| 1.08G/1.18G [00:03&lt;00:00, 288MB/s]
- 95%|#########5| 1.12G/1.18G [00:04&lt;00:00, 316MB/s]
- 98%|#########8| 1.15G/1.18G [00:04&lt;00:00, 334MB/s]
-100%|##########| 1.18G/1.18G [00:04&lt;00:00, 296MB/s]
+  2%|1         | 19.5M/1.18G [00:00&lt;00:06, 204MB/s]
+  4%|3         | 44.7M/1.18G [00:00&lt;00:05, 239MB/s]
+  6%|5         | 67.4M/1.18G [00:00&lt;00:05, 234MB/s]
+  7%|7         | 89.8M/1.18G [00:00&lt;00:05, 223MB/s]
+  9%|9         | 111M/1.18G [00:00&lt;00:05, 214MB/s]
+ 11%|#         | 132M/1.18G [00:00&lt;00:05, 213MB/s]
+ 13%|#2        | 152M/1.18G [00:00&lt;00:05, 200MB/s]
+ 14%|#4        | 172M/1.18G [00:00&lt;00:05, 201MB/s]
+ 16%|#5        | 191M/1.18G [00:00&lt;00:05, 202MB/s]
+ 17%|#7        | 211M/1.18G [00:01&lt;00:05, 192MB/s]
+ 19%|#9        | 231M/1.18G [00:01&lt;00:05, 197MB/s]
+ 21%|##        | 250M/1.18G [00:01&lt;00:05, 186MB/s]
+ 23%|##2       | 271M/1.18G [00:01&lt;00:04, 197MB/s]
+ 24%|##4       | 290M/1.18G [00:01&lt;00:04, 196MB/s]
+ 26%|##5       | 313M/1.18G [00:01&lt;00:04, 208MB/s]
+ 28%|##7       | 333M/1.18G [00:01&lt;00:04, 208MB/s]
+ 29%|##9       | 353M/1.18G [00:01&lt;00:04, 208MB/s]
+ 31%|###1      | 374M/1.18G [00:01&lt;00:04, 214MB/s]
+ 33%|###2      | 395M/1.18G [00:01&lt;00:03, 214MB/s]
+ 35%|###4      | 417M/1.18G [00:02&lt;00:03, 218MB/s]
+ 36%|###6      | 438M/1.18G [00:02&lt;00:04, 185MB/s]
+ 38%|###8      | 462M/1.18G [00:02&lt;00:03, 203MB/s]
+ 40%|####      | 483M/1.18G [00:02&lt;00:03, 208MB/s]
+ 42%|####1     | 504M/1.18G [00:02&lt;00:03, 210MB/s]
+ 44%|####3     | 525M/1.18G [00:02&lt;00:03, 213MB/s]
+ 45%|####5     | 547M/1.18G [00:02&lt;00:03, 219MB/s]
+ 47%|####7     | 571M/1.18G [00:02&lt;00:02, 227MB/s]
+ 49%|####9     | 595M/1.18G [00:02&lt;00:02, 234MB/s]
+ 51%|#####1    | 617M/1.18G [00:03&lt;00:02, 232MB/s]
+ 53%|#####3    | 639M/1.18G [00:03&lt;00:02, 230MB/s]
+ 55%|#####5    | 664M/1.18G [00:03&lt;00:02, 236MB/s]
+ 57%|#####7    | 686M/1.18G [00:03&lt;00:02, 231MB/s]
+ 59%|#####8    | 708M/1.18G [00:03&lt;00:02, 223MB/s]
+ 61%|######    | 730M/1.18G [00:03&lt;00:02, 216MB/s]
+ 62%|######2   | 750M/1.18G [00:03&lt;00:02, 204MB/s]
+ 64%|######3   | 770M/1.18G [00:03&lt;00:02, 200MB/s]
+ 66%|######6   | 795M/1.18G [00:03&lt;00:01, 218MB/s]
+ 68%|######8   | 822M/1.18G [00:04&lt;00:01, 235MB/s]
+ 70%|#######   | 846M/1.18G [00:04&lt;00:01, 239MB/s]
+ 72%|#######2  | 871M/1.18G [00:04&lt;00:01, 247MB/s]
+ 75%|#######4  | 902M/1.18G [00:04&lt;00:01, 271MB/s]
+ 77%|#######7  | 931M/1.18G [00:04&lt;00:01, 281MB/s]
+ 80%|#######9  | 959M/1.18G [00:04&lt;00:00, 282MB/s]
+ 82%|########1 | 986M/1.18G [00:04&lt;00:00, 281MB/s]
+ 84%|########4 | 0.99G/1.18G [00:04&lt;00:00, 277MB/s]
+ 86%|########6 | 1.01G/1.18G [00:04&lt;00:00, 251MB/s]
+ 88%|########8 | 1.04G/1.18G [00:04&lt;00:00, 246MB/s]
+ 91%|######### | 1.07G/1.18G [00:05&lt;00:00, 263MB/s]
+ 93%|#########2| 1.09G/1.18G [00:05&lt;00:00, 266MB/s]
+ 95%|#########5| 1.12G/1.18G [00:05&lt;00:00, 254MB/s]
+ 97%|#########7| 1.14G/1.18G [00:05&lt;00:00, 242MB/s]
+100%|#########9| 1.17G/1.18G [00:05&lt;00:00, 263MB/s]
+100%|##########| 1.18G/1.18G [00:05&lt;00:00, 228MB/s]
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_emission</span><span class="p">(</span><a href="https://pytorch.org/docs/stable/tensors.html#torch.Tensor" title="torch.Tensor" class="sphx-glr-backref-module-torch sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">emission</span></a><span class="p">):</span>
@@ -1325,7 +1337,7 @@ transcription errors exist.</p>
 <p>Thanks to <a class="reference external" href="mailto:vineelkpratap&#37;&#52;&#48;meta&#46;com">Vineel Pratap</a> and <a class="reference external" href="mailto:zni&#37;&#52;&#48;meta&#46;com">Zhaoheng
 Ni</a> for developing and open-sourcing the
 forced aligner API.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  7.485 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  8.770 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-tutorials-ctc-forced-alignment-api-tutorial-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/fd312a07c77ccd892cb337379bf91f16/ctc_forced_alignment_api_tutorial.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">ctc_forced_alignment_api_tutorial.py</span></code></a></p>
